@@ -19,7 +19,15 @@ references: {
   key: 'id',
   unique: true
     }
-  }
+  },
+    tag_id: {
+      type: DataTypes.INTEGER,
+      references: {
+        model: 'tag',
+        key: 'id',
+        unique: true
+      }
+    }
   },
   {
     sequelize,
