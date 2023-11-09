@@ -48,24 +48,23 @@ router.post('/', async (req, res) => {
     res.status(400).json(err);
   }
 });
-
 router.put('/:id', async (req, res) => {
-  // update a category by its `id` value
-  try{
-  const CategoryDate = await Category.update({category_name:
-    req.body.category_name,},
-    {where: {
-      id: req.body.id,},
+  try {
+    
+    const [newCategory] = await Category.update(
+      { category_name: req.body.category_name },
+      {where: {
+          id: req.params.id,
+        },}
+    );
+    if (newCategory === 0) {
+      res.status(404).json({ message: 'Category not found' });
+    } else {
+      res.status(200).json({ message: 'Changes to the category were successful' });
     }
-  );
-  if (!CategoryDate) {
-    res.status(404).json({ message: 'That category doesnt exist' });
-    return;
+  } catch (err) {
+    res.status(500).json(err);
   }
-  res.status(200).json({message:'Changes to category were successful'});
-} catch (err) {
-  res.status(500).json(err);
-}
 });
 
 router.delete('/:id', async (req, res) => {
