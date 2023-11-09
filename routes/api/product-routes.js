@@ -34,29 +34,16 @@ router.get('/', async (req, res) => {
 
     router.get('/:id', async (req, res) => {
       try {
-        const Product = await Product.findByPk(req.params.id, {
-          include: [{ model: Tag }, { model: ProductTag }],
-          attributes: {
-            include: [
-              [
-                sequelize.literal(
-                  '(SELECT * FROM product_tag WHERE product.id = product_tag.product_id)'
-                ),
-                'product_id',
-              ],
-            ],
-          },
+        const Products = await Product.findByPk(req.params.id, {
+          include: [{ model: Tag, through: ProductTag, as:'some_product' }],
         });
     
-        if (!Product) {
+        if (!Products) {
           return res.status(404).json({ message: 'Product by that ID was not found by ID' });
         }
     
-        res.status(200).json({
-          id: Product.id,
-          product_name: Product.product_name,
-          price: Product.price,
-        })
+        res.status(200).json(Products);
+        
       } catch (err) {
         res.status(500).json({ message: 'Internal Server Error by ID' });
       }
@@ -154,7 +141,7 @@ router.delete('/:id', async (req, res) => {
 
     res.status(200).json({ message: 'Product deleted' });
   } catch (err) {
-    // Log the error for debugging purposes
+
     console.error(err);
     res.status(500).json({ message: 'Internal Server Error from DELETE' });
   }
