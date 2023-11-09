@@ -20,39 +20,49 @@ const { Product, Category, Tag, ProductTag } = require('../../models');
         ],
       },
       });
+      if (!Products) {
+
+        return res.status(404).json({ message: 'No products found from GET' });
+      }
+  
       res.status(200).json(Products);
     } catch (err) {
-      res.status(500).json(err);
+
+      console.error(err);
+      res.status(500).json({ message: 'Internal Server Error from GET' });
     }
+  });
+
+    router.get('/:id', async (req, res) => {
+      try {
+        const Product = await Product.findByPk(req.params.id, {
+          include: [{ model: Tag }, { model: ProductTag }],
+          attributes: {
+            include: [
+              [
+                sequelize.literal(
+                  '(SELECT * FROM product_tag WHERE product.id = product_tag.product_id)'
+                ),
+                'product_id',
+              ],
+            ],
+          },
+        });
+    
+        if (!Product) {
+          return res.status(404).json({ message: 'Product by that ID was not found by ID' });
+        }
+    
+        res.status(200).json({
+          id: Product.id,
+          product_name: Product.product_name,
+          price: Product.price,
+        })
+      } catch (err) {
+        res.status(500).json({ message: 'Internal Server Error by ID' });
+      }
     });
-
-// get one product
-router.get('/:id', async (req, res) => {
-  try {
-    const Product = await Product.findByPk(req.params.id, {
-      include: [{ model: Tag }, {model:ProductTag}],
-      attributes: {
-        include: [
-          [
-            sequelize.literal(
-              '(SELECT * FROM product_tag WHERE product.id = product_tag.product_id)'
-            ),
-            'product_id',
-          ],
-        ],
-      },
-    });
-
-    if (!Product) {
-      res.status(404).json({ message: 'Product by that name was not found' });
-      return;
-    }
-
-    res.status(200).json(Tags);
-  } catch (err) {
-    res.status(500).json(err);
-  }
-});
+    
 
 // create new product
 router.post('/', async (req, res) => {
@@ -139,13 +149,15 @@ router.delete('/:id', async (req, res) => {
         id: req.params.id,
       },
     });
-    if (!Products) {
-      res.status(404).json({ message: 'That product doesnt exist' });
-      return;
+    if (Products === 0) {
+      return res.status(404).json({ message: 'Product not found from DELETE' });
     }
-    res.status(200).json(Products);
+
+    res.status(200).json({ message: 'Product deleted' });
   } catch (err) {
-    res.status(500).json(err);
+    // Log the error for debugging purposes
+    console.error(err);
+    res.status(500).json({ message: 'Internal Server Error from DELETE' });
   }
 });
 
