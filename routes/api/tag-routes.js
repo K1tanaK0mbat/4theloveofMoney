@@ -1,28 +1,28 @@
 const router = require('express').Router();
-const { Tag, Product, ProductTag } = require('../../models');
+const sequelize = require('../../config/connection');
+const { Product, Category, Tag, ProductTag } = require('../../models');
 
-// The `/api/tags` endpoint
-
+async function init() {
+  try {
+    await sequelize.sync(); // Synchronize models with the database
+    console.log('Database synced successfully');
+  } catch (error) {
+    console.error('Error syncing the database:', error);
+  }
+}
 router.get('/', async (req, res) => {
   try {
-    const Tags = await Tag.findAll({
-      include: [{model:Product}, {model:ProductTag}],
-    attributes: {
-      include: [
-        [
-          sequelize.literal(
-            '(SELECT * FROM product_tag WHERE tag.id = product_tag.tag_id)'
-          ),
-          'tag_id',
-        ],
-      ],
-    },
-    });
+    const Tags = await Tag.findAll();
+    if (!Tags) {
+      return res.status(404).json({ message: 'No tags found from GET ' });
+    }
+    
     res.status(200).json(Tags);
   } catch (err) {
-    res.status(500).json(err);
+    console.error(err);
+    res.status(500).json({ message: 'Internal Server Error from GET' });
   }
-  });
+});
 
 router.get('/:id', async (req, res) => {
   try {
@@ -40,7 +40,7 @@ router.get('/:id', async (req, res) => {
       },
     });
 
-    if (!Tags) {
+    if (!Tag) {
       res.status(404).json({ message: 'Tag id not found' });
       return;
     }
