@@ -1,37 +1,36 @@
 const router = require('express').Router();
+const sequelize = require('../../config/connection');
 const { Product, Category, Tag, ProductTag } = require('../../models');
 
+async function init() {
+  try {
+    await sequelize.sync(); // Synchronize models with the database
+    console.log('Database synced successfully');
+  } catch (error) {
+    console.error('Error syncing the database:', error);
+  }
+}
+
+init();
 // The `/api/products` endpoint
 
 // get all products
 
-  router.get('/', async (req, res) => {
-    try {
-      const Products = await Product.findAll({
-        include: [{model:Tag}, {model:ProductTag}],
-      attributes: {
-        include: [
-          [
-            sequelize.literal(
-              '(SELECT * FROM product_tag WHERE product.id = product_tag.product_id)'
-            ),
-            'product_id',
-          ],
-        ],
-      },
-      });
-      if (!Products) {
-
-        return res.status(404).json({ message: 'No products found from GET' });
-      }
-  
-      res.status(200).json(Products);
-    } catch (err) {
-
-      console.error(err);
-      res.status(500).json({ message: 'Internal Server Error from GET' });
+router.get('/', async (req, res) => {
+  try {
+    const Products = await Product.findAll();
+    
+    if (!Products) {
+      return res.status(404).json({ message: 'No products found from GET ' });
     }
-  });
+    
+    res.status(200).json(Products);
+  } catch (err) {
+    console.error(err);
+    res.status(500).json({ message: 'Internal Server Error from GET' });
+  }
+});
+
 
     router.get('/:id', async (req, res) => {
       try {

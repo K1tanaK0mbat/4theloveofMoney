@@ -1,23 +1,21 @@
 const router = require('express').Router();
-const { Category, Product } = require('../../models');
+const sequelize = require('../../config/connection');
+const { Product, Category, } = require('../../models');
 
-// The `/api/categories` endpoint
+async function init() {
+  try {
+    await sequelize.sync(); // Synchronize models with the database
+    console.log('Database synced successfully');
+  } catch (error) {
+    console.error('Error syncing the database:', error);
+  }
+}
+
+init();
 
 router.get('/', async (req, res) => {
 try {
-  const CategoryData = await Category.findAll({
-    include: [{model:Product}],
-  attributes: {
-    include: [
-      [
-        sequelize.literal(
-          '(SELECT * FROM product WHERE category.id = product.category_id)'
-        ),
-        'category_name',
-      ],
-    ],
-  },
-  });
+  const CategoryData = await Category.findAll();
   res.status(200).json(CategoryData);
 } catch (err) {
   res.status(500).json(err);
