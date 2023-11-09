@@ -27,20 +27,10 @@ router.get('/', async (req, res) => {
 router.get('/:id', async (req, res) => {
   try {
     const Tags = await Tag.findByPk(req.params.id, {
-      include: [{ model: Product }, {model:ProductTag}],
-      attributes: {
-        include: [
-          [
-            sequelize.literal(
-              '(SELECT * FROM product_tag WHERE tag.id = product_tag.tag_id)'
-            ),
-            'tag_id',
-          ],
-        ],
-      },
+      include: [{ model: Product, through: ProductTag, as:'some_tag' }],
     });
 
-    if (!Tag) {
+    if (!Tags) {
       res.status(404).json({ message: 'Tag id not found' });
       return;
     }

@@ -26,16 +26,6 @@ router.get('/:id', async (req, res) => {
   try {
     const CategoryData = await Category.findByPk(req.params.id, {
       include: [{ model: Product }],
-      attributes: {
-        include: [
-          [
-            sequelize.literal(
-              '(SELECT * FROM product WHERE category.id = product.category_id)'
-            ),
-            'category_name',
-          ],
-        ],
-      },
     });
 
     if (!CategoryData) {
