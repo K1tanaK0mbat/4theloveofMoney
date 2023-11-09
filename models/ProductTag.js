@@ -17,7 +17,7 @@ type: DataTypes.INTEGER,
 references: { 
   model: 'product',
   key: 'id',
-  unique: true
+  unique: false
     }
   },
     tag_id: {
@@ -25,7 +25,7 @@ references: {
       references: {
         model: 'tag',
         key: 'id',
-        unique: true
+        unique: false
       }
     }
   },
