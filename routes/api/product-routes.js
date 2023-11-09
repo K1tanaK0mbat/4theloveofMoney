@@ -141,7 +141,7 @@ router.delete('/:id', async (req, res) => {
 
     res.status(200).json({ message: 'Product deleted' });
   } catch (err) {
-    // Log the error for debugging purposes
+
     console.error(err);
     res.status(500).json({ message: 'Internal Server Error from DELETE' });
   }
