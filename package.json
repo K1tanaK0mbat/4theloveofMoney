@@ -24,5 +24,5 @@
     "mysql2": "^2.3.3",
     "sequelize": "^6.34.0"
   },
-  "description": ""
+  "description": "The purpose of this project is create an application that'll help bussiness owners maintain a well established and highly functioning ecommerce website by utilizing mysql to create, update, and store data regarding inventory.The backend of the application allows managers and owners to easly keep track of their internet retail bussiness's stock by organizing stock based on product, categories, and tags associated with the items. This way, its very easy for both management and others to view and update the bussiness's data."
 }
