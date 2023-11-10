@@ -8,3 +8,21 @@ router.use('/products', productRoutes);
 router.use('/tags', tagRoutes);
 
 module.exports = router;
+
+/* Category request body example:
+{"category_name": "name"}
+
+ Product request body example:
+ {
+      "product_name": "name",
+      "price": "00.00",
+      "stock": 0,
+	"category_id":1,
+      "tagIds": [1, 2]
+    }
+
+    Tag request body example:
+    {
+	"tag_name": "name"
+}
+  */
