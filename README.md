@@ -14,8 +14,12 @@ The purpose of this project is create an application that'll help bussiness owne
 
 ## Installation 
 To install the application, clone the folder from its Github repo. Next, the user has to type in the terminal 'npm install' to install all necessary packages. After, typing 'npm init -y' will make sure the application has been intialized. To make sure the database exists, run mysql with 'mysql -u root -p' and enter password for your mysql account (make sure env file is updated with login information aswell). Enter the following sql commands: 'SHOW DATABASES'; 'CREATE DATABASE ecommerce_db'. If the database already exists, exit mysql and enter 'run npm seed' in terminal.Lastly, enter 'npm start' to start the application on local server.
+https://drive.google.com/file/d/1jtM-WgsdP0_q1U3bi0NzVto__csGcDPR/view
 ## Usage 
-To use application, the user hasto send requests in Insomia. For the request, the url should like this 'http://localhost:3001/api/' with the desired route or table addded to the end of the url. Use GET to view any of the databse tables. Use POST to added a row or item to a table, PUT to update a ro or item, and DELETE to remove a row or item; These requests need the specific id number added to the end of the http request inorder to work.
+To use application, the user hasto send requests in Insomia. For the request, the url should like this 'http://localhost:3001/api/' with the desired route or table addded to the end of the url. Use GET to view any of the databse tables. Use POST to added a row or item to a table, PUT to update a ro or item, and DELETE to remove a row or item; These requests need the specific id number added to the end of the http request inorder to work. The file routes/api/index.js shows what the routes are and how request bodies should look for POST and PUT.
+![image](https://github.com/K1tanaK0mbat/4theloveofMoney/assets/134855189/f5055d59-b9b2-4005-aec4-8d97acda211a)
+https://drive.google.com/file/d/1soqP3j2HnePIuD6m0euKsbXoZVbms070/view
+
 ## License 
 For this project, I license my work under the MIT License.License info is here https://choosealicense.com/licenses/mit/
 ## Contribution
